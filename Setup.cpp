@@ -11,6 +11,14 @@ template<typename T>
 T Setup::power(T a, T b, T n)
 {
     T result = 1;
+
+    a = a % n;
+
+    if(a == 0)
+    {
+        return 0;
+    }
+
     while(b > 0) 
     {
         if(b % 2 == 1) 
@@ -22,7 +30,7 @@ T Setup::power(T a, T b, T n)
     }
 
     return result;
-};
+}
 
 bool Setup::millerTest(int512_t d, int512_t n)
 {

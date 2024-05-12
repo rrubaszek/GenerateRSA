@@ -5,38 +5,46 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/math/common_factor.hpp>
 
-#include "Setup.h"
-
 using namespace boost::multiprecision;
 
-template<typename T> 
+template<typename T>
 T power(T a, T b, T n)
 {
     T result = 1;
-    while(b > 0) 
+
+    a = a % n;
+
+    if(a == 0)
     {
-        if(b % 2 == 1) 
+        return 0;
+    }
+
+    while(b > 0)
+    {
+        if(b % 2 == 1)
         {
             result = (result*a) % n;
         }
         a = (a * a) % n;
-        b = b / 2; 
+        b = b / 2;
     }
 
     return result;
-};
+}
 
-void crack(int1024_t e, int1024_t d, int1024_t n, int1024_t& p, int1024_t& q)
+std::pair<int1024_t, int1024_t> crack(int1024_t e, int1024_t d, int1024_t n, int1024_t& p, int1024_t& q)
 {
-    int1024_t t = (e * d - 1);
-    int1024_t phi = t;
+    int1024_t phi = ((e * d) - 1);
+    int1024_t t = phi;
     while(t % 2 == 0)
     {
+	std::cout << t << "\n";
         t = t / 2;
     }
 
+    std::cout << "T: " << t << "Phi: " << phi << "\n";
+
     int1024_t k, x;
-    int1024_t temp = 1;
     int1024_t a = 2;
     while(a < 100)
     {
@@ -46,8 +54,9 @@ void crack(int1024_t e, int1024_t d, int1024_t n, int1024_t& p, int1024_t& q)
             x = power<int1024_t>(a, k, n);
             if(x != 1 && x != (n - 1) && (x*x) % n == 1)
             {
-                temp = boost::math::gcd<int1024_t>(x-1, n);
-                break;
+                p = boost::math::gcd<int1024_t>(x-1, n);
+		q = n / p;
+		return std::make_pair(p, q);
             }
 
             k = k * 2;
@@ -55,10 +64,7 @@ void crack(int1024_t e, int1024_t d, int1024_t n, int1024_t& p, int1024_t& q)
 
         a = a + 2;
     }
-    
-    q = n / temp;
-    p = temp;
-
+    return std::make_pair(0, 0);
 }
 
 int main()
@@ -85,8 +91,8 @@ int main()
     n = numbers.at(2);
 
     std::cout << "Cracking...\n";
-    crack(e, d, n, p, q);
-    std::cout << p << "\n" << q << "\n";
+    auto res = crack(e, d, n, p, q);
+    std::cout << res.first << "\n" << res.second << "\n";
 
     return 0;
 }
