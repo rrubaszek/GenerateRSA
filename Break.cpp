@@ -4,6 +4,7 @@
 #include <fstream>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/math/common_factor.hpp>
+#include <boost/integer/mod_inverse.hpp>
 
 using namespace boost::multiprecision;
 
@@ -46,7 +47,7 @@ std::pair<int1024_t, int1024_t> crack(int1024_t e, int1024_t d, int1024_t n, int
 
     int1024_t k, x;
     int1024_t a = 2;
-    while(a < 100)
+    while(true)
     {
         k = t;
         while(k < phi)
@@ -55,14 +56,14 @@ std::pair<int1024_t, int1024_t> crack(int1024_t e, int1024_t d, int1024_t n, int
             if(x != 1 && x != (n - 1) && (x*x) % n == 1)
             {
                 p = boost::math::gcd<int1024_t>(x-1, n);
-		q = n / p;
-		return std::make_pair(p, q);
+		        q = n / p;
+		        return std::make_pair(p, q);
             }
 
             k = k * 2;
         }
 
-        a = a + 2;
+        a = a + 1;
     }
     return std::make_pair(0, 0);
 }
@@ -85,14 +86,28 @@ int main()
         numbers.push_back(num);
     }
 
-    int1024_t e, d, n;
+    std::ifstream inputFile1("keysBob.txt");
+    if (!inputFile1) 
+    {
+        std::cerr << "Error opening file." << std::endl;
+        return 1;
+    }
+
+    while(inputFile1 >> num)
+    {
+        numbers.push_back(num);
+    }
+
+    int1024_t e, e2, d, n;
     e = numbers.at(0);
     d = numbers.at(1);
     n = numbers.at(2);
+    e2 = numbers.at(3);
 
     std::cout << "Cracking...\n";
     auto res = crack(e, d, n, p, q);
     std::cout << res.first << "\n" << res.second << "\n";
+    std::cout << "d = " << boost::integer::mod_inverse(e2, n) << " e = " << e2;
 
     return 0;
 }

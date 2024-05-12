@@ -113,10 +113,10 @@ std::pair<int512_t, int512_t> Setup::findPrimes(int512_t a, int512_t b, int1024_
 
     } while (!isPrime(q, k));
 	
-	//n = (int1024_t)(p * q);
+	n = (int1024_t)(p * q);
 
     //another version
-    n = (int1024_t)((p-1) * (q-1));
+    //n = (int1024_t)((p-1) * (q-1));
 
     return std::make_pair(p, q);
 }

@@ -54,8 +54,7 @@ int main()
     }
     else
     {
-        std::cout << "Wrong input\n";
-        return 0;
+        bits = 4;
     }
 
     std::cout << "Initializing...\n";
@@ -70,6 +69,8 @@ int main()
     Setup* setup = new Setup();
 
     std::pair<int512_t, int512_t> primes = setup->findPrimes(a, b, n);
+
+    delete(setup);
 
     std::cout << primes.first << " " << primes.second << "\n";
 
@@ -91,7 +92,7 @@ int main()
 
     int1024_t dec = encryption(encrypted, res1.second, n);
 
-    std::cout << "decrypted message: " << dec % n << "\n";
+    std::cout << "decrypted message: " << dec << "\n";
 
     std::ofstream myfile;
     myfile.open("keysAlice.txt");
@@ -101,8 +102,6 @@ int main()
     myfile.open("keysBob.txt");
     myfile << res2.first << "\n" << res2.second << "\n" << n;
     myfile.close();
-
-    delete(setup);
 
 	return 0;
 }
