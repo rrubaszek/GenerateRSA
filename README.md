@@ -9,7 +9,7 @@ This repository contains a C++ implementation for **generating RSA keys**, utili
 - Uses **Boost Multiprecision** for handling large prime numbers.
 - Implements **RSA key pair generation**.
 - Efficient and modular code structure.
-- Uses Miller - Rabbin's test for efficient checking number's primality 
+- Uses Miller - Rabbin's test for efficient checking number's primality.
 
 ## Usage
 1. Clone the repository:
